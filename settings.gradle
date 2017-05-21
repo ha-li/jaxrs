@@ -1,2 +1,4 @@
 include 'restResources'
+include 'model'
+
 
