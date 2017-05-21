@@ -1,5 +1,7 @@
 package com.gecko.resources;
 
+import com.fasterxml.jackson.databind.ObjectMapper;
+import org.glassfish.jersey.jackson.JacksonFeature;
 import org.glassfish.jersey.server.ResourceConfig;
 
 import javax.ws.rs.ApplicationPath;
@@ -20,6 +22,9 @@ public class MyApplicationResource extends ResourceConfig {
     */
 
    public MyApplicationResource () {
+
       packages("com.gecko.resources");
+      packages("com.gecko.domain.json").register(ObjectMapper.class)
+              .register(JacksonFeature.class);
    }
 }

@@ -23,7 +23,7 @@ public class TicketResource {
    @Path("/{id}")
    public Response getTicket(@PathParam("id") String id) {
       Message message = new Message();
-      message.setMsg("Hello World!");
+      message.setMsg("Hello World! Welcome to ticket " + id + "!");
       return Response.ok().entity(message).build();
    }
 

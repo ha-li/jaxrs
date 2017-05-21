@@ -26,6 +26,7 @@
          the url pattern can be more specific like /*
      -->
 
+    <!--
     <servlet>
         <servlet-name>Jersey Application</servlet-name>
         <servlet-class>org.glassfish.jersey.servlet.ServletContainer</servlet-class>
@@ -39,12 +40,12 @@
         <servlet-name>Jersey Application</servlet-name>
         <url-pattern>/*</url-pattern>
     </servlet-mapping>
-
+    -->
 
     <!-- this block is for my resource config,
          the url pattern can be more specific like /*
      -->
-    <!--
+
     <servlet>
         <servlet-name>Jersey Application</servlet-name>
         <servlet-class>org.glassfish.jersey.servlet.ServletContainer</servlet-class>
@@ -58,5 +59,4 @@
         <servlet-name>Jersey Application</servlet-name>
         <url-pattern>/*</url-pattern>
     </servlet-mapping>
-    -->
 </web-app>
