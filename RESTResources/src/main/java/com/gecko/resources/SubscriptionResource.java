@@ -9,7 +9,10 @@ import javax.ws.rs.HeaderParam;
 import javax.ws.rs.Path;
 import javax.ws.rs.PathParam;
 import javax.ws.rs.Produces;
+import javax.ws.rs.core.Context;
+import javax.ws.rs.core.HttpHeaders;
 import javax.ws.rs.core.MediaType;
+import javax.ws.rs.core.MultivaluedMap;
 import javax.ws.rs.core.Response;
 
 /**
@@ -39,7 +42,7 @@ public class SubscriptionResource {
     *
     * based on the cookie named chocolate the header would be
     * Cookie: sub-id=132846;realm=34223
-    * 
+    *
     * @param clientId
     * @param userId
     * @return
@@ -54,6 +57,22 @@ public class SubscriptionResource {
       Subscription subscription = new Subscription ();
       subscription.setUser(userId);
       subscription.setId (clientId);
+      return Response.ok().entity(subscription).build();
+   }
+
+   @GET
+   @Path("context")
+   public Response withContext (
+           @Context HttpHeaders headers
+   ) {
+      Subscription subscription = new Subscription ();
+      subscription.setUser(headers.getHeaderString (GeckoHeaders.CLIENT_ID));
+
+      MultivaluedMap<String, String> requestHeadermap = headers.getRequestHeaders ();
+      for(String headerKey : requestHeadermap.keySet ()) {
+         System.out.println ("header: " + headerKey + ", value: " + requestHeadermap.get(headerKey));
+      }
+
       return Response.ok().entity(subscription).build();
    }
 }
