@@ -25,6 +25,8 @@ public class MyApplicationResource extends ResourceConfig {
 
       packages("com.gecko.resources");
       packages("com.gecko.domain.json").register(ObjectMapper.class)
-              .register(JacksonFeature.class);
+              .register(JacksonFeature.class)
+              .register(MarshallingFeature.class);
+
    }
 }

@@ -1,4 +1,4 @@
-include 'restResources'
+include 'RESTResources'
 include 'model'
 
 
