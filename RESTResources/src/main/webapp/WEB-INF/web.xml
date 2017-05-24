@@ -57,6 +57,6 @@
     </servlet>
     <servlet-mapping>
         <servlet-name>Jersey Application</servlet-name>
-        <url-pattern>/kinky/*</url-pattern>
+        <url-pattern>/*</url-pattern>
     </servlet-mapping>
 </web-app>
