@@ -11,6 +11,7 @@ import javax.ws.rs.Path;
 import javax.ws.rs.PathParam;
 import javax.ws.rs.Produces;
 import javax.ws.rs.core.Application;
+import javax.ws.rs.core.CacheControl;
 import javax.ws.rs.core.Context;
 import javax.ws.rs.core.HttpHeaders;
 import javax.ws.rs.core.MediaType;
@@ -128,7 +129,8 @@ public class SubscriptionResource {
    ) {
       Subscription subscription = new Subscription ();
       subscription.setUser(name);
-
-      return Response.ok().entity(subscription).build();
+      CacheControl cacheControl = new CacheControl ();
+      cacheControl.setMaxAge (86400);   // 1 day in secs
+      return Response.ok().cacheControl (cacheControl).entity(subscription).build();
    }
 }
