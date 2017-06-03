@@ -1,7 +1,28 @@
 package com.gecko.client.rest;
 
+import com.gecko.domain.json.Subscription;
+import org.glassfish.jersey.client.JerseyClientBuilder;
+
+import javax.ws.rs.client.Client;
+import javax.ws.rs.client.ClientBuilder;
+import javax.ws.rs.client.WebTarget;
+import javax.ws.rs.core.Response;
+
 /**
  * Created by hlieu on 06/3/17.
  */
 public class SubscriptionClient {
+
+   public static void main (String[] args) {
+      ClientBuilder jerseyBuilder = new JerseyClientBuilder ();
+
+      Client jserseyClient = jerseyBuilder.build();
+      WebTarget subscriptionTarget = jserseyClient.target("http://localhost:8080/restAdapter/subscription");
+      WebTarget contextSubscriptTarget = subscriptionTarget.path("/context?name=bob");
+
+      Response subscriptContextResponse = contextSubscriptTarget.request().get();
+      String responseStr = subscriptContextResponse.readEntity (String.class);
+      System.out.println (responseStr);
+      //System.out.println ("id: " + subscriptResponse.getId () + ", user: " + subscriptResponse.getUser ());
+   }
 }
