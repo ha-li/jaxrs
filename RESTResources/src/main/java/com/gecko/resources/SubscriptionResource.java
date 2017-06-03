@@ -3,6 +3,7 @@ package com.gecko.resources;
 import com.gecko.domain.json.Subscription;
 import com.gecko.rest.headers.GeckoHeaders;
 
+import javax.inject.Singleton;
 import javax.ws.rs.CookieParam;
 import javax.ws.rs.Encoded;
 import javax.ws.rs.GET;
@@ -10,6 +11,7 @@ import javax.ws.rs.HeaderParam;
 import javax.ws.rs.Path;
 import javax.ws.rs.PathParam;
 import javax.ws.rs.Produces;
+import javax.ws.rs.QueryParam;
 import javax.ws.rs.core.Application;
 import javax.ws.rs.core.CacheControl;
 import javax.ws.rs.core.Context;
@@ -24,7 +26,26 @@ import javax.ws.rs.core.UriInfo;
 /**
  * Created by hlieu on 05/23/17.
  */
+
+/*
+ *  Root resource class - any pojo class that has @Path or has subroutines with @Path in it.
+ *  By default, every time a request is made, a new instance of the root resource class is created.
+ *  The scope of the root resource class is limited to that request only.
+ *
+ *  By limiting the scope of the root resource class to that request only, multiple concurrent requests
+ *  to the root resource are easily managed. The application developer does not need to do anything
+ *  to handle multiple concurrent requests.
+ *
+ *  If the root resource was a singleton, there would be performance issues when handling multiple
+ *  concurrent requests.
+ *
+ *  With request scoped resource classes, the JVM can easily do garbage collection once the instance
+ *  has handled the request.
+ *
+ *  We can also make a root resource a singleton by adding @Singleton annotation at the class level.
+ */
 @Path ("subscription")
+// @Singleton - to make this root resource a singleton, uncomment this annotation
 @Produces({MediaType.APPLICATION_JSON})
 public class SubscriptionResource {
 
@@ -39,6 +60,18 @@ public class SubscriptionResource {
 
    @Context
    private SecurityContext securityContext;
+
+   // this shows you can use query params not just at a method parameter level,
+   // but also as a class level. As long as you do not make the root resource a singleton,
+   // this is not an issue.
+   @QueryParam("name")
+   private String name;
+
+   private String bobIsName;
+
+   public SubscriptionResource (@QueryParam ("name") String queryName) {
+      bobIsName = queryName;
+   }
 
    // other context you can inject include
    // Providers (like MessageBodyReader, MessageBodyWriter, ExceptionMapper, ContextResolver
@@ -127,6 +160,7 @@ public class SubscriptionResource {
       @Encoded
       @PathParam("name") String name
    ) {
+      System.out.println (this);
       Subscription subscription = new Subscription ();
       subscription.setUser(name);
       CacheControl cacheControl = new CacheControl ();
