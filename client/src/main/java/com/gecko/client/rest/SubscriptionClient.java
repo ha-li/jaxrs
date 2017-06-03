@@ -10,6 +10,11 @@ import javax.ws.rs.client.WebTarget;
 import javax.ws.rs.core.Response;
 
 /**
+ * To run this client start up tomcat with subscription resource as specified by the context url below.
+ * You can start up tomcat in DEBUG mode or regular mode.
+ *
+ * Then run this client which will call the service and get back a string response.
+ *
  * Created by hlieu on 06/3/17.
  */
 public class SubscriptionClient {
@@ -32,6 +37,14 @@ public class SubscriptionClient {
       }
 
       System.out.println ("id: " + subscription.getId () + ", user: " + subscription.getUser ());
-      //System.out.println ("id: " + subscriptResponse.getId () + ", user: " + subscriptResponse.getUser ());
+
+      String output = null;
+      try {
+         output = JsonUnMarshaller.formatForOutput (subscription);
+      } catch (Exception e) {
+         e.printStackTrace ();
+      }
+
+      System.out.println (output);
    }
 }

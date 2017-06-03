@@ -1,5 +1,7 @@
 package com.gecko.json.bind;
 
+import com.fasterxml.jackson.databind.SerializationFeature;
+
 import java.io.File;
 import java.io.IOException;
 import java.util.Collection;
@@ -14,10 +16,10 @@ public class JsonUnMarshaller {
 
    static {
       JACKSON_OBJ_MAPPER = new com.fasterxml.jackson.databind.ObjectMapper ();
+      JACKSON_OBJ_MAPPER.enable(SerializationFeature.INDENT_OUTPUT);
    }
 
    public static <T> List<T> unmarshallAll (String fileName, Collection<T> collection, T t) throws IOException {
-      // need to fix this -- right now it assumes its an Employee...
       COLLECTION_TYPE = JACKSON_OBJ_MAPPER.getTypeFactory ().constructCollectionType (List.class, t.getClass());
 
       return JACKSON_OBJ_MAPPER.readValue(new File (fileName), COLLECTION_TYPE);
@@ -27,4 +29,7 @@ public class JsonUnMarshaller {
       return (T) JACKSON_OBJ_MAPPER.readValue (jsonStringValue, t.getClass());
    }
 
+   public static <T> String formatForOutput (T t) throws IOException {
+      return JACKSON_OBJ_MAPPER.writeValueAsString (t);
+   }
 }
