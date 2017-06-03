@@ -1,6 +1,7 @@
 package com.gecko.client.rest;
 
 import com.gecko.domain.json.Subscription;
+import com.gecko.json.bind.JsonUnMarshaller;
 import org.glassfish.jersey.client.JerseyClientBuilder;
 
 import javax.ws.rs.client.Client;
@@ -22,7 +23,15 @@ public class SubscriptionClient {
 
       Response subscriptContextResponse = contextSubscriptTarget.request().get();
       String responseStr = subscriptContextResponse.readEntity (String.class);
-      System.out.println (responseStr);
+
+      Subscription subscription = null;
+      try {
+         subscription = JsonUnMarshaller.unmarshall (responseStr, new Subscription ());
+      } catch (Exception e) {
+         e.printStackTrace ();
+      }
+
+      System.out.println ("id: " + subscription.getId () + ", user: " + subscription.getUser ());
       //System.out.println ("id: " + subscriptResponse.getId () + ", user: " + subscriptResponse.getUser ());
    }
 }
