@@ -1,13 +1,14 @@
 package com.gecko.resources;
 
-import com.gecko.domain.json.Subscription;
 import com.gecko.rest.headers.GeckoHeaders;
+import com.gecko.schema.subscription.v1.Subscription;
 
-import javax.inject.Singleton;
+import javax.ws.rs.Consumes;
 import javax.ws.rs.CookieParam;
 import javax.ws.rs.Encoded;
 import javax.ws.rs.GET;
 import javax.ws.rs.HeaderParam;
+import javax.ws.rs.POST;
 import javax.ws.rs.Path;
 import javax.ws.rs.PathParam;
 import javax.ws.rs.Produces;
@@ -22,6 +23,7 @@ import javax.ws.rs.core.Request;
 import javax.ws.rs.core.Response;
 import javax.ws.rs.core.SecurityContext;
 import javax.ws.rs.core.UriInfo;
+import java.util.UUID;
 
 /**
  * Created by hlieu on 05/23/17.
@@ -44,9 +46,11 @@ import javax.ws.rs.core.UriInfo;
  *
  *  We can also make a root resource a singleton by adding @Singleton annotation at the class level.
  */
-@Path ("subscription")
+
 // @Singleton - to make this root resource a singleton, uncomment this annotation
-@Produces({MediaType.APPLICATION_JSON})
+@Path ("subscription")
+@Consumes ({MediaType.APPLICATION_JSON, MediaType.APPLICATION_JSON})
+@Produces({MediaType.APPLICATION_XML, MediaType.APPLICATION_JSON})
 public class SubscriptionResource {
 
    @Context
@@ -163,6 +167,19 @@ public class SubscriptionResource {
       System.out.println (this);
       Subscription subscription = new Subscription ();
       subscription.setUser(name);
+      CacheControl cacheControl = new CacheControl ();
+      cacheControl.setMaxAge (86400);   // 1 day in secs
+      return Response.ok().cacheControl (cacheControl).entity(subscription).build();
+   }
+
+   // the request should specify header "Content-Type: application/json"
+   @POST
+   @Path("subscriber/{id}")
+   public Response createSubscription (@PathParam("id") String id, Subscription request) {
+      System.out.println ("creating a subscription");
+      Subscription subscription = new Subscription ();
+      subscription.setUser(id);
+      subscription.setId(UUID.randomUUID ().toString());
       CacheControl cacheControl = new CacheControl ();
       cacheControl.setMaxAge (86400);   // 1 day in secs
       return Response.ok().cacheControl (cacheControl).entity(subscription).build();

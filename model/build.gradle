@@ -1,13 +1,60 @@
 description = 'data modeling'
 
+configurations {
+   jaxb
+}
+
 repositories {
    mavenCentral ()
 }
 
-dependencies {
+ext.targetDir = project.file ("${projectDir}/target/src")
+sourceSets {
+   main {
+      java {
+         srcDir targetDir
+      }
+   }
+}
 
+
+dependencies {
+   jaxb 'com.sun.xml.bind:jaxb-xjc:2.2.7-b41'
+   jaxb 'com.sun.xml.bind:jaxb-impl:2.2.7-b41'
+   jaxb 'javax.xml.bind:jaxb-api:2.2.7'
    compile 'com.fasterxml.jackson.core:jackson-annotations:2.5.4'
    compile 'com.fasterxml.jackson.core:jackson-core:2.5.4'
 
    testCompile 'junit:junit:4.12'
 }
+
+ext.schemaDir = project.file ("${projectDir}/src/main/resources")
+task jaxb () {
+
+   doLast {
+      targetDir.deleteDir()
+      targetDir.mkdirs()
+      ant.taskdef(
+              name: 'xjc',
+              classname: 'com.sun.tools.xjc.XJCTask',
+              classpath: configurations.jaxb.asPath
+      )
+
+      ant.xjc (destdir: targetDir) {
+         arg(line: '-xmlschema')  // force the input file to be a xml schema, this is default
+         //arg(line: '-extension')  // permit vendor specific extensions to jaxb, disable
+//         arg(line: '-Xcopy-xml-element-to-getters')  // not in jaxb 2.0
+         schema (dir: schemaDir, includes: "**/*.xsd")
+         //binding (dir: schemaDir, includes: "binding.xml")
+      }
+   }
+}
+compileJava.dependsOn jaxb
+assemble.dependsOn compileJava
+
+task cleanJaxb () {
+   doLast {
+      targetDir.deleteDir ()
+   }
+}
+clean.dependsOn cleanJaxb
