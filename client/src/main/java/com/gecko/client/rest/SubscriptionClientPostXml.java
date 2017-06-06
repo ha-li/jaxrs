@@ -11,9 +11,9 @@ import javax.ws.rs.client.WebTarget;
 import javax.ws.rs.core.Response;
 
 /**
- * Created by hlieu on 06/4/17.
+ * Created by hlieu on 06/5/17.
  */
-public class SubscriptionClientJsonPost {
+public class SubscriptionClientPostXml {
    public static void main (String[] args) {
       ClientBuilder jerseyBuilder = new JerseyClientBuilder ();
 
@@ -22,7 +22,7 @@ public class SubscriptionClientJsonPost {
       WebTarget contextSubscriptTarget = subscriptionTarget.path("/subscriber/teahouseFresca");
 
       Subscription subscription = new Subscription ();
-      Response subscriptContextResponse = contextSubscriptTarget.request().post(Entity.json (subscription));
+      Response subscriptContextResponse = contextSubscriptTarget.request().post(Entity.xml (subscription));
       Subscription responseStr = (Subscription) subscriptContextResponse.readEntity (Subscription.class);
 
       System.out.println ("id: " + responseStr.getId () + ", user: " + responseStr.getUser ());
