@@ -13,7 +13,7 @@ import javax.ws.rs.core.Response;
 /**
  * Created by hlieu on 06/5/17.
  */
-public class SubscriptionClientPostXml {
+public class SubscriptionClientXmlPost {
    public static void main (String[] args) {
       ClientBuilder jerseyBuilder = new JerseyClientBuilder ();
 
