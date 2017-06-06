@@ -5,6 +5,7 @@ import com.gecko.schema.subscription.v1.Subscription;
 
 import javax.ws.rs.Consumes;
 import javax.ws.rs.CookieParam;
+import javax.ws.rs.DELETE;
 import javax.ws.rs.Encoded;
 import javax.ws.rs.GET;
 import javax.ws.rs.HeaderParam;
@@ -195,5 +196,21 @@ public class SubscriptionResource {
       createdSub.setId(id);
       createdSub.setUser(update.getUser());
       return Response.ok().entity(createdSub).build();
+   }
+
+   @DELETE
+   @Path("subscriber/{id}")
+   public Response deleteSubscription (@PathParam("id") String id, Subscription delete) {
+      String deleteUser = delete.getUser();
+      String deleteId = delete.getId();
+      String deleteParam = id;
+
+      if (deleteParam.equals (deleteId)) {
+         Subscription deleted = new Subscription ();
+         deleted.setId (id);
+         deleted.setUser(deleteUser);
+         return Response.ok ().entity (deleted).build ();
+      }
+      return Response.status (Response.Status.CONFLICT).entity(delete).build();
    }
 }
