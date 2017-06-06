@@ -9,6 +9,7 @@ import javax.ws.rs.Encoded;
 import javax.ws.rs.GET;
 import javax.ws.rs.HeaderParam;
 import javax.ws.rs.POST;
+import javax.ws.rs.PUT;
 import javax.ws.rs.Path;
 import javax.ws.rs.PathParam;
 import javax.ws.rs.Produces;
@@ -183,5 +184,16 @@ public class SubscriptionResource {
       CacheControl cacheControl = new CacheControl ();
       cacheControl.setMaxAge (86400);   // 1 day in secs
       return Response.ok().cacheControl (cacheControl).entity(subscription).build();
+   }
+
+   @PUT
+   @Path ("subscriber/{id}")
+   public Response updateSubscription (@PathParam("id") String id, Subscription update) {
+      System.out.println ("updating a subscription");
+      Response created = createSubscription(id, update);
+      Subscription createdSub = (Subscription) created.getEntity();
+      createdSub.setId(id);
+      createdSub.setUser(update.getUser());
+      return Response.ok().entity(createdSub).build();
    }
 }
