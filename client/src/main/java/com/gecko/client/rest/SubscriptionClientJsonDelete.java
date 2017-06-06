@@ -19,9 +19,13 @@ public class SubscriptionClientJsonDelete {
 
       Client jserseyClient = jerseyBuilder.build();
       WebTarget subscriptionTarget = jserseyClient.target("http://localhost:8080/restAdapter/subscription");
-      WebTarget contextSubscriptTarget = subscriptionTarget.path("/subscriber/123/teahouseFresca");
+      Response jrsyResponse = subscriptionTarget.path("/subscriber/{id}/{user}")
+              .resolveTemplate("id", "123")
+              .resolveTemplate("user", "teahouseFresca")
+              .request()
+              .delete(Response.class);
 
-      Response jrsyResponse = contextSubscriptTarget.request().delete (Response.class);
+      // Response jrsyResponse = contextSubscriptTarget.request().delete (Response.class);
       Subscription response = (Subscription) jrsyResponse.readEntity (Subscription.class);
 
       System.out.println ("id: " + response.getId () + ", user: " + response.getUser ());
