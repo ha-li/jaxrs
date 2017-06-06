@@ -199,18 +199,18 @@ public class SubscriptionResource {
    }
 
    @DELETE
-   @Path("subscriber/{id}")
-   public Response deleteSubscription (@PathParam("id") String id, Subscription delete) {
-      String deleteUser = delete.getUser();
-      String deleteId = delete.getId();
-      String deleteParam = id;
+   @Path("subscriber/{id}/{user}")
+   public Response deleteSubscription (@PathParam("id") String id, @PathParam("user") String user) {
 
-      if (deleteParam.equals (deleteId)) {
-         Subscription deleted = new Subscription ();
+      String deleteId = id;
+      String deleteUser = user;
+
+      Subscription deleted = new Subscription ();
+      if (true) {
          deleted.setId (id);
          deleted.setUser(deleteUser);
          return Response.ok ().entity (deleted).build ();
       }
-      return Response.status (Response.Status.CONFLICT).entity(delete).build();
+      return Response.status (Response.Status.CONFLICT).entity(deleted).build();
    }
 }
