@@ -22,6 +22,7 @@ public class SubscriptionClientJsonDelete {
       Response jrsyResponse = subscriptionTarget.path("/subscriber/{id}/{user}")
               .resolveTemplate("id", "123")
               .resolveTemplate("user", "teahouseFresca")
+              .queryParam("name", "bob")
               .request()
               .delete(Response.class);
 
