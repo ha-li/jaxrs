@@ -22,15 +22,19 @@ dependencies {
    jaxb 'com.sun.xml.bind:jaxb-xjc:2.2.7-b41'
    jaxb 'com.sun.xml.bind:jaxb-impl:2.2.7-b41'
    jaxb 'javax.xml.bind:jaxb-api:2.2.7'
+
    compile 'com.fasterxml.jackson.core:jackson-annotations:2.5.4'
    compile 'com.fasterxml.jackson.core:jackson-core:2.5.4'
 
    testCompile 'junit:junit:4.12'
 }
 
-ext.schemaDir = project.file ("${projectDir}/src/main/resources")
-task jaxb () {
+ext.schemaDir = project.file ("${projectDir}/src/main/resources/schema")
+ext.bindingDir = project.file ("${projectDir}/src/main/resources/binding")
 
+task jaxb () {
+   // req for java.time.localdatetime adapter
+   System.setProperty ('javax.xml.accessExternalSchema', 'file')
    doLast {
       targetDir.deleteDir()
       targetDir.mkdirs()
@@ -42,10 +46,12 @@ task jaxb () {
 
       ant.xjc (destdir: targetDir) {
          arg(line: '-xmlschema')  // force the input file to be a xml schema, this is default
-         //arg(line: '-extension')  // permit vendor specific extensions to jaxb, disable
-//         arg(line: '-Xcopy-xml-element-to-getters')  // not in jaxb 2.0
+         // permit vendor specific extensions to jaxb, disable
+         //  arg(line: '-Xcopy-xml-element-to-getters')  // not in jaxb 2.0
          schema (dir: schemaDir, includes: "**/*.xsd")
-         //binding (dir: schemaDir, includes: "binding.xml")
+
+         arg(line: '-extension')
+         binding (dir: bindingDir, includes: "bindings.xsd")
       }
    }
 }
