@@ -1,6 +1,6 @@
 package com.gecko.resources;
 
-import com.gecko.domain.json.Message;
+import com.gecko.schema.subscription.v1.Message;
 
 import javax.ws.rs.Consumes;
 import javax.ws.rs.DefaultValue;
@@ -26,7 +26,7 @@ public class TicketResource {
    @GET
    @Path("{id}")
    public Response getTicket(@PathParam("id") String id) {
-      Message message = new Message();
+      Message message = new Message ();
       message.setMsg("Hello World! Welcome to ticket " + id + "!");
       return Response.ok().entity(message).build();
    }
