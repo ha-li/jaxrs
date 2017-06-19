@@ -7,7 +7,7 @@ repositories {
 }
 
 dependencies {
-   compile project (":model")
+   // compile project (":model") remove dependency on model project to simulate real world
    compile 'org.glassfish.jersey.media:jersey-media-json-jackson:2.22.2'
    compile 'org.glassfish.jersey.media:jersey-media-jaxb:2.22.2'
 

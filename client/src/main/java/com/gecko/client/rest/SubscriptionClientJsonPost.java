@@ -1,35 +1,47 @@
 package com.gecko.client.rest;
 
+import com.gecko.domain.Subscription;
 import com.gecko.json.bind.JsonUnMarshaller;
-import com.gecko.schema.subscription.v1.Subscription;
-import org.glassfish.jersey.client.JerseyClientBuilder;
 
-import javax.ws.rs.client.Client;
-import javax.ws.rs.client.ClientBuilder;
 import javax.ws.rs.client.Entity;
 import javax.ws.rs.client.WebTarget;
+import javax.ws.rs.core.MediaType;
 import javax.ws.rs.core.Response;
 
 /**
  * Created by hlieu on 06/4/17.
  */
-public class SubscriptionClientJsonPost {
+public class SubscriptionClientJsonPost
+        extends SubscriptionClient
+{
+
    public static void main (String[] args) {
-      ClientBuilder jerseyBuilder = new JerseyClientBuilder ();
 
-      Client jserseyClient = jerseyBuilder.build();
-      WebTarget subscriptionTarget = jserseyClient.target("http://localhost:8080/restAdapter/subscription");
-      WebTarget contextSubscriptTarget = subscriptionTarget.path("/subscriber/teahouseFresca");
+      SubscriptionClientJsonPost jsonPost = new SubscriptionClientJsonPost();
 
-      Subscription subscription = new Subscription ();
-      Response subscriptContextResponse = contextSubscriptTarget.request().post(Entity.json (subscription));
-      Subscription responseStr = (Subscription) subscriptContextResponse.readEntity (Subscription.class);
+      String id = "teahouseFresca";
+      WebTarget restTarget = jsonPost.resourcePath ("subscriber/{id}")
+              .resolveTemplate ("id", id);
 
-      System.out.println ("id: " + responseStr.getId () + ", user: " + responseStr.getUser ());
+      Subscription postParam = new Subscription ();
+      postParam.setId (id);
+
+      // on the client side, request is what the response mime type
+      // should come back as (here it's application/json)
+      Response response = restTarget
+              .request(MediaType.APPLICATION_JSON)
+              .post(Entity.json (postParam));
 
       String output = null;
       try {
-         output = JsonUnMarshaller.formatForOutput (responseStr);
+         Subscription subscription = (Subscription) response.readEntity (Subscription.class);
+
+         // can also get the string entity and unmarshall that
+         // String strData = (String) response.readEntity (String.class);
+         // Subscription subscription = JsonUnMarshaller.unmarshall (strData, new Subscription());
+         System.out.println ("id: " + subscription.getId () + ", user: " + subscription.getUser ());
+
+         output = JsonUnMarshaller.formatForOutput (subscription);
       } catch (Exception e) {
          e.printStackTrace ();
       }

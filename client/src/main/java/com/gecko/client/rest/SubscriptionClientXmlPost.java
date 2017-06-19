@@ -1,7 +1,7 @@
 package com.gecko.client.rest;
 
+import com.gecko.domain.Subscription;
 import com.gecko.json.bind.JsonUnMarshaller;
-import com.gecko.schema.subscription.v1.Subscription;
 import org.glassfish.jersey.client.JerseyClientBuilder;
 
 import javax.ws.rs.client.Client;

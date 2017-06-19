@@ -1,37 +1,35 @@
 package com.gecko.client.rest;
 
+import com.gecko.domain.Subscription;
 import com.gecko.json.bind.JsonUnMarshaller;
-import com.gecko.schema.subscription.v1.Subscription;
-import org.glassfish.jersey.client.JerseyClientBuilder;
 
-import javax.ws.rs.client.Client;
-import javax.ws.rs.client.ClientBuilder;
 import javax.ws.rs.client.Entity;
 import javax.ws.rs.client.WebTarget;
+import javax.ws.rs.core.MediaType;
 import javax.ws.rs.core.Response;
 
 /**
  * Created by hlieu on 06/5/17.
  */
-public class SubscriptionClientJsonPut {
+public class SubscriptionClientJsonPut
+        extends SubscriptionClient
+{
+
    public static void main (String[] args) {
-      ClientBuilder jerseyBuilder = new JerseyClientBuilder ();
+      SubscriptionClientJsonPut jsonPut = new SubscriptionClientJsonPut ();
+      WebTarget subscriptionTarget = jsonPut.resourcePath("/subscriber/teahouseFresca");
 
-      Client jserseyClient = jerseyBuilder.build();
-      WebTarget subscriptionTarget = jserseyClient.target("http://localhost:8080/restAdapter/subscription");
-      WebTarget contextSubscriptTarget = subscriptionTarget.path("/subscriber/teahouseFresca");
+      Subscription param = new Subscription ();
+      param.setUser("Mysterious User");
+      param.setId ("123123");
+      Response response = subscriptionTarget.request(MediaType.APPLICATION_JSON).put(Entity.json (param));
+      Subscription subscription = (Subscription) response.readEntity (Subscription.class);
 
-      Subscription subscription = new Subscription ();
-      subscription.setUser("Mysterious User");
-      subscription.setId ("123123");
-      Response subscriptContextResponse = contextSubscriptTarget.request().put(Entity.json (subscription));
-      Subscription responseStr = (Subscription) subscriptContextResponse.readEntity (Subscription.class);
-
-      System.out.println ("id: " + responseStr.getId () + ", user: " + responseStr.getUser ());
+      System.out.println ("id: " + subscription.getId () + ", user: " + subscription.getUser ());
 
       String output = null;
       try {
-         output = JsonUnMarshaller.formatForOutput (responseStr);
+         output = JsonUnMarshaller.formatForOutput (subscription);
       } catch (Exception e) {
          e.printStackTrace ();
       }
