@@ -7,11 +7,12 @@ repositories {
 }
 
 dependencies {
-   // compile project (":model") remove dependency on model project to simulate real world
-   compile 'org.glassfish.jersey.media:jersey-media-json-jackson:2.22.2'
+   compile project (":model")
+   // remove dependency on model project to simulate real world
+   //compile 'org.glassfish.jersey.media:jersey-media-json-jackson:2.22.2'
    compile 'org.glassfish.jersey.media:jersey-media-jaxb:2.22.2'
 
-   compile 'com.fasterxml.jackson.core:jackson-databind:2.5.4'
+   //compile 'com.fasterxml.jackson.core:jackson-databind:2.5.4'
    compile 'org.glassfish.jersey.core:jersey-client:2.22.2'
 
    testCompile 'junit:junit:4.12'

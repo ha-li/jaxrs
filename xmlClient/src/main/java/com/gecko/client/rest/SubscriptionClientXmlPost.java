@@ -1,6 +1,6 @@
 package com.gecko.client.rest;
 
-import com.gecko.domain.Subscription;
+import com.gecko.schema.subscription.v1.Subscription;
 import org.glassfish.jersey.client.JerseyClientBuilder;
 
 import javax.ws.rs.client.Client;
@@ -26,25 +26,22 @@ public class SubscriptionClientXmlPost {
       WebTarget target = subscriptionTarget.path("/subscriber/teahouseFresca");
       //WebTarget xmlTarget = target.register(MarshallingFeature.class);
 
-      Subscription subscription = new Subscription ();
+      Subscription imput = new Subscription ();
       Response response = target
               .request(MediaType.APPLICATION_XML)
               .accept(MediaType.APPLICATION_XML)
-              .post(Entity.xml (subscription));
+              .post(Entity.xml (imput));
 
+      Subscription subscription = (Subscription) response.readEntity (Subscription.class);
+      System.out.println ("id: " + subscription.getId () + ", user: " + subscription.getUser ());
 
-      //String responseStr = (String) response.readEntity (String.class);
-
-      Subscription responseStr = (Subscription) response.readEntity (Subscription.class);
-      //System.out.println ("id: " + responseStr.getId () + ", user: " + responseStr.getUser ());
-
-      /* String output = null;
-      try {
+      String output = null;
+      /* try {
          output = JsonUnMarshaller.formatForOutput (responseStr);
       } catch (Exception e) {
          e.printStackTrace ();
       } */
 
-      //System.out.println (output);
+      System.out.println (subscription);
    }
 }
