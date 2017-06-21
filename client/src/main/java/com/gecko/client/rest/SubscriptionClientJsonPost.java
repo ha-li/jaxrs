@@ -30,6 +30,7 @@ public class SubscriptionClientJsonPost
       // should come back as (here it's application/json)
       Response response = restTarget
               .request(MediaType.APPLICATION_JSON)
+              //.accept(MediaType.APPLICATION_JSON)
               .post(Entity.json (postParam));
 
       String output = null;

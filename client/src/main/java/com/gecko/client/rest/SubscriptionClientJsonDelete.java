@@ -24,6 +24,7 @@ public class SubscriptionClientJsonDelete
               .resolveTemplate("user", "teahouseFresca")
               .queryParam("name", "bob")
               .request(MediaType.APPLICATION_JSON)
+              .accept(MediaType.APPLICATION_JSON)
               .delete(Response.class);
 
       Subscription response = (Subscription) jrsyResponse.readEntity (Subscription.class);

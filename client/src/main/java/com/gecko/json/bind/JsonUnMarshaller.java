@@ -1,6 +1,11 @@
 package com.gecko.json.bind;
 
+import com.fasterxml.jackson.databind.AnnotationIntrospector;
+import com.fasterxml.jackson.databind.DeserializationFeature;
 import com.fasterxml.jackson.databind.SerializationFeature;
+import com.fasterxml.jackson.databind.introspect.AnnotationIntrospectorPair;
+import com.fasterxml.jackson.databind.introspect.JacksonAnnotationIntrospector;
+import com.fasterxml.jackson.module.jaxb.JaxbAnnotationIntrospector;
 
 import java.io.File;
 import java.io.IOException;
@@ -16,7 +21,23 @@ public class JsonUnMarshaller {
 
    static {
       JACKSON_OBJ_MAPPER = new com.fasterxml.jackson.databind.ObjectMapper ();
-      JACKSON_OBJ_MAPPER.enable(SerializationFeature.INDENT_OUTPUT);
+
+      AnnotationIntrospector jaxbIntrospector = new JaxbAnnotationIntrospector ();
+      AnnotationIntrospector jacksonIntrospector = new JacksonAnnotationIntrospector ();
+      AnnotationIntrospectorPair introspectorPair =
+              new AnnotationIntrospectorPair(jacksonIntrospector, jaxbIntrospector);
+
+      JACKSON_OBJ_MAPPER.getDeserializationConfig ().withAppendedAnnotationIntrospector (introspectorPair);
+      JACKSON_OBJ_MAPPER.getSerializationConfig ().withAppendedAnnotationIntrospector (introspectorPair);
+
+      // WRAP_ROOT_VALUE - adds the object type to the output
+      JACKSON_OBJ_MAPPER.configure (SerializationFeature.WRAP_ROOT_VALUE, true)
+         .configure (DeserializationFeature.UNWRAP_ROOT_VALUE, true)
+         .configure (DeserializationFeature.FAIL_ON_UNKNOWN_PROPERTIES, false)
+         // this feature pretty prints json in multiple lines - not necessary here, but useful
+         // in real world application development
+         //.enable(SerializationFeature.INDENT_OUTPUT)
+      ;
    }
 
    public static <T> List<T> unmarshallAll (String fileName, Collection<T> collection, T t) throws IOException {
