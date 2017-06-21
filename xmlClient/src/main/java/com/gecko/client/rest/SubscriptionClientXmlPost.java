@@ -1,9 +1,6 @@
 package com.gecko.client.rest;
 
-import com.gecko.config.CustomJacksonJsonProvider;
-import com.gecko.config.MarshallingFeature;
 import com.gecko.domain.Subscription;
-import com.gecko.json.bind.JsonUnMarshaller;
 import org.glassfish.jersey.client.JerseyClientBuilder;
 
 import javax.ws.rs.client.Client;
@@ -23,7 +20,7 @@ public class SubscriptionClientXmlPost {
       ClientBuilder jerseyBuilder = new JerseyClientBuilder ();
 
       Client jserseyClient = jerseyBuilder
-              .register(CustomJacksonJsonProvider.class)
+              //.register(CustomJacksonJsonProvider.class)
               .build();
       WebTarget subscriptionTarget = jserseyClient.target("http://localhost:8080/restAdapter/subscription");
       WebTarget target = subscriptionTarget.path("/subscriber/teahouseFresca");
@@ -41,13 +38,13 @@ public class SubscriptionClientXmlPost {
       Subscription responseStr = (Subscription) response.readEntity (Subscription.class);
       //System.out.println ("id: " + responseStr.getId () + ", user: " + responseStr.getUser ());
 
-      String output = null;
+      /* String output = null;
       try {
          output = JsonUnMarshaller.formatForOutput (responseStr);
       } catch (Exception e) {
          e.printStackTrace ();
-      }
+      } */
 
-      System.out.println (output);
+      //System.out.println (output);
    }
 }

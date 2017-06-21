@@ -1,5 +1,6 @@
 include 'RESTResources'
 include 'model'
-include 'client'
+include 'xmlClient'
+include 'jsonClient'
 
 

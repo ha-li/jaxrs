@@ -1,6 +1,5 @@
 package com.gecko.client.rest;
 
-import com.gecko.config.CustomJacksonJsonProvider;
 import org.glassfish.jersey.client.JerseyClientBuilder;
 
 import javax.ws.rs.client.Client;
